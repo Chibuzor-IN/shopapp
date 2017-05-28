@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ShopApp</title>
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'stock/home_style.css' %}">
+		<script type="text/javascript" src="{% static 'stock/home_js.js' %}"></script>
+	</head>
+	<body onload="load('show_items')">
+		<span><h2 style = "border:0"><font color="#700000 ">Shop</font><font color="006600">App</font></h2></span>
+        <center>
+			<h3>
+			{% if messages %}
+				{% for message in messages %}
+					<span{% if message.tags %} class="{{message.tags}}"{% endif %}> {{ message }} </span>
+				{% endfor %}
+			{% endif %}
+			<div>
+	            <table class="nav_bar_table">
+	                <tr>
+	                	<td></td>
+	                    <td style = "width: 30%;"> <a class="nav_bar" onclick="load('show_items')">View items</a> </td>
+	                    <td style = "width: 30%;"> <a class="nav_bar" onclick="load('add_item')">Add new item</a> </td>
+	                    <td style = "width: 30%;"> <a class="nav_bar" onclick="load('edit_items')">Edit items</a> </td>
+	                    <td></td>
+	                </tr>
+                </table>
+            </div>
+			</h3>
+				<div id = "show_items">
+					<form>
+						<table style = "width: 100%">
+		                    <tr>
+		                        <td style = "width: 70%">
+		                        	<input type="text" id="search_text" onkeyup="find(this.value, 'search_to_view', 'show_items_table')" placeholder="Search for an item" class = "txt">
+		                        </td>
+		                        <td></td>
+		                        <td style = "width: 29%">
+		                        	<h3> <a class="btn" onclick="find(document.getElementById('search_text').value, 'search_to_view', 'show_items_table')">Search</a> </h3>
+		                        </td>
+		                    </tr>
+		                </table>
+					</form>
+					{% if items %}
+						<br>
+						<form action = "{% url 'stock:delete_items' %}" method = "POST" id = "del_item_form">
+							{% csrf_token %}
+							<table class = "show_items_table" id = "show_items_table">
+								<tr>
+		                            <th></th>
+									<th>Item name</th>
+									<th>Price</th>
+									<th>Number Available</th>
+								</tr>
+									<script> counter = 1; </script>
+									{% for item in items %}
+										<script>
+											if (counter % 2 == 0) {
+												document.write('<tr class = "dark">');
+											}
+											else {
+												document.write('<tr>');
+											}
+											counter++;
+										</script>
+		                                    <td><input type="checkbox" name="delete[]" value="{{ item.name }}"></td>
+											<td>{{ item.name }}</td>
+											<td>{{ item.price }}</td>
+											<td>{{ item.number_available }}</td>
+										</tr>
+									{% endfor %}
+							</table>
+							<br>
+							<h3>
+								<table style = "width: 100%">
+				                    <tr>
+				                        <td style = "width: 50%"> <a class="btn" onclick="submit_form('del_item_form')">Delete selected items</a> </td>
+				                        <td style = "width: 50%"> <a class="btn" onclick="delete_all()">Delete all items</a> </td>
+				                    </tr>
+				                </table>
+							</h3>
+						</form>
+					{% else %}
+						There are no items.
+					{% endif %}
+				</div>
+				<div id = "add_item">
+					<form action = "{% url 'stock:add_item' %}" method = "POST" id = "add_item_form">
+						{% csrf_token %}
+						<h3>
+						Item name
+						<input type = "text" name = "name" class = "txt">
+						<br>
+						Price
+						<input type = "text" name = "price" class = "txt">
+						<br>
+						Number available
+						<input type = "text" name = "number_available" class = "txt">
+						<br>
+						<a class="btn" onclick="submit_form('add_item_form')">Add</a>
+						</h3>				
+					</form>
+				</div>
+				<div id = "edit_items">
+					<form action = "{% url 'stock:search_to_edit' %}" method = "GET" id = "search_edit">
+						<table style = "width: 100%">
+		                    <tr>
+		                        <td style = "width: 70%">
+		                        	<input type="text" name="q" id="search_text_edit" placeholder="Search for an item" class = "txt">
+		                        </td>
+		                        <td></td>
+		                        <td style = "width: 29%">
+		                        	<h3> <a class="btn" onclick="find(document.getElementById('search_text_edit').value, 'search_to_edit', 'edit_items_table')">Search</a> </h3>
+		                        </td>
+		                    </tr>
+		                </table>
+					</form>
+					{% if items %}
+						<form action = "{% url 'stock:edit_items' %}" method = "POST" id = "edit_items_form">
+							{% csrf_token %}
+							<input type="hidden" name="name" id="name">
+							<table class = "show_items_table" id = "edit_items_table">
+								<tr>
+									<th>Item name</th>
+									<th>Price</th>
+									<th>Number Available</th>
+									<th></th>
+								</tr>
+								<script> counter = 1; </script>
+								{% for item in items %}
+									<script>
+										if (counter % 2 == 0) {
+											document.write('<tr class = "dark">');
+										}
+										else {
+											document.write('<tr>');
+										}
+										counter++;
+									</script>
+										<td>{{ item.name }}</td>
+										<td><input type="text" name="price_{{ item.name }}" value="{{ item.price }}"></td>
+										<td><input type="text" name="number_available_{{ item.name }}" value="{{ item.number_available }}"></td>
+										<td><a style="width:90%" class="btn" onclick="document.getElementById('name').value='{{ item.name }}'; submit_form('edit_items_form')">Edit</a></td>
+									</tr>
+								{% endfor %}
+							</table>
+						</form>
+					{% else %}
+						There are no items.
+					{% endif %}
+				</div>
+			</div>
+	    </center>
+	</body>
+</html>
