@@ -1,0 +1,56 @@
+.nav_bar_table {
+	width: 100%;
+	border-top: 2px darkgrey;
+	border-bottom: 2px darkgrey;
+    border-collapse: collapse;
+    border-style: ridge none;
+}
+
+#show_items, #add_item, #edit_items {
+    width: 90%;
+	display: none;
+}
+
+.show_items_table {
+	width:100%;
+	border-collapse:collapse;
+}
+.show_items_table td, .show_items_table th {
+	font-size:19px;
+	border:1px solid #98bf21;
+	padding:3px 7px 2px 7px;
+}
+.show_items_table th {
+	font-size:22px;
+	text-align:left;
+	padding-top:5px;
+	padding-bottom:4px;
+	background-color:#A7C942;
+	color:white;
+}
+.show_items_table tr.dark td {
+	background-color:#EAF2D3;
+}
+
+#add_item form {
+	font-family: "Courier New";
+}
+
+.txt, .btn, .btn:link, .btn:visited, .nav_bar, .nav_bar:link, .nav_bar:visited {
+	display: block;
+    width: 100%;
+    padding: 4px;
+    border: 2px darkgrey;
+    border-radius: 5%;
+    border-style: ridge;
+}
+.nav_bar, .nav_bar:link, .nav_bar:visited {
+    border-style: none ridge none;
+}
+.btn, .btn:link, .btn:visited, .nav_bar, .nav_bar:link, .nav_bar:visited {
+    background-color: white;
+    text-align: center;
+}
+.btn:hover, .btn:active, .nav_bar:hover, .nav_bar:active {
+	background-color: lightgrey;
+}
